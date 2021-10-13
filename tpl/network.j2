@@ -1,0 +1,33 @@
+[Match]
+Name={{item.value.peer_name}}-wg
+
+[Network]
+DHCP=no
+IPv6AcceptRA=false
+IPForward=yes
+
+# for networkd >= 244 KeepConfiguration stops networkd from
+# removing routes on this interface when restarting
+KeepConfiguration=yes
+
+# for networkd < 244 the CriticalConnection parameter achieves
+# the same thing
+[DHCP]
+CriticalConnection=true
+
+{% if item.value.link_local %}
+[Address]
+Address={{hostvars[inventory_hostname].linklocal}}/64
+{% endif %}
+
+{% for ip in item.value.peeringip%}
+{% if ip | ansible.netcommon.ipv4 %} 
+[Address]
+Address={{hostvars[inventory_hostname].vars.peerip}}/32
+Peer={{ip}}/32
+{% elif ip | ansible.netcommon.ipv6 %}
+[Address]
+Address={{hostvars[inventory_hostname].vars.peerip6}}/128
+Peer{{ip}}/128
+{% endif %}
+{% endfor %}

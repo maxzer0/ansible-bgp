@@ -1,0 +1,14 @@
+---
+- hosts: peering
+  tasks:
+    - name: "Get all the peer data into a variable"
+      include_vars: 
+        name: peers
+        file: vars/peers/{{hostvars[inventory_hostname].peering_country}}-wg.yml
+
+    - name: "Execute systemd-networkd and bird configuration task"
+      include_tasks: handlers/gen-upd.yml
+      with_dict: "{{ peers }}"
+
+    - name: "Reconfiguring bird"
+      shell: "birdc configure"

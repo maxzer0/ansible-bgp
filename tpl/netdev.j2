@@ -1,0 +1,14 @@
+[NetDev]
+Name={{item.value.peer_name}}-wg
+Kind=wireguard
+
+[WireGuard]
+PrivateKey={{hostvars[inventory_hostname].privkey}}
+ListenPort=2{{item.value.asn[-5:]}}
+
+[WireGuardPeer]
+PublicKey={{item.value.pubkey}}
+Endpoint={{item.value.endpoint}}:{{item.value.wireguardport}}
+AllowedIPs=fe80::/64
+AllowedIPs=fd00::/8
+AllowedIPs=0.0.0.0/0
