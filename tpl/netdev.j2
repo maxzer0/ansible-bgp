@@ -4,7 +4,8 @@ Kind=wireguard
 
 [WireGuard]
 PrivateKey={{hostvars[inventory_hostname].privkey}}
-ListenPort=2{{item.value.asn[-5:]}}
+ListenPort=2{{item.value.asn[-5:]}} {# Cut the first 6* 
+ *(count starts at 0) digits of the foreign peer's ASN and start the port with 2. This is an DN42 only thing!#}
 
 [WireGuardPeer]
 PublicKey={{item.value.pubkey}}
