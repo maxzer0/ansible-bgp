@@ -6,8 +6,8 @@
         name: peers
         file: vars/peers/{{hostvars[inventory_hostname].peering_country}}-wg.yml
 
-    - name: "Execute systemd-networkd and bird configuration task"
-      include_tasks: handlers/gen-upd.yml
+    - name: "Execute systemd-networkd and bird configuration task" # This is for WireGuard solutions.
+      include_tasks: handlers/wg-conf.yml
       with_dict: "{{ peers }}"
 
     - name: "Reconfiguring bird"
