@@ -1,0 +1,11 @@
+# Generate BIRD configuration for IPv4
+---
+- name: "Get priority using ruby script"
+  shell: "ruby /root/bgp-community.rb {{item.value.peeringip}} 1000 encrypted"
+  register: priority_peering
+
+- name: "Generating bird4 configuration for {{item.value.peer_name}}"
+  template:
+    src: tpl/peer4/bird4.j2
+    dest: /etc/bird/peer4/{{item.value.peer_name}}.conf
+  when: item.value.ip_type == "ipv4"

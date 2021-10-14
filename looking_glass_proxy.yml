@@ -1,0 +1,7 @@
+---
+- hosts: peering
+  tasks:
+    - name: "Gather information needed for running this playbook."
+      set_fact:
+       
+    - name: "Generate WireGuard connection configuration to looking glass webserver"

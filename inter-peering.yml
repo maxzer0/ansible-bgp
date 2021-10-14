@@ -1,0 +1,17 @@
+---
+- hosts: peering
+  tasks:
+    - name: "Generate private key for this specific WireGuard connection"
+      shell: "wg genkey > tee privkey"
+      register: wg_priv
+
+    - name: "Read public key from our randomly generated private key"
+      shell: "wg pubkey < privkey"
+      register: wg_pub 
+
+    - name: "Get peering data for next server in line"
+      set_fact:
+        local_peer:
+          peeringip: 
+          peeringip6:
+          wireguardport:

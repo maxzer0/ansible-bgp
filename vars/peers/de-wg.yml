@@ -1,4 +1,4 @@
-# Peers located in Germany which use a WireShark connection.
+# Peers located in Germany which use a WireGuard connection.
 ---
 peer1:
   peer_name: tech9
