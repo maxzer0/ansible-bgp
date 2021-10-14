@@ -2,12 +2,12 @@
 ---
 - name: "Generating netdev config file for {{item.value.peer_name}}"
   template:
-    src: tpl/netdev.j2
+    src: tpl/wg/netdev.j2
     dest: /etc/systemd/network/{{item.value.peer_name}}.netdev
 
 - name: "Generating network config file for {{item.value.peer_name}}"
   template:
-    src: tpl/network.j2
+    src: tpl/wg/network.j2
     dest: /etc/systemd/network/{{item.value.peer_name}}.network
 
 - name: "Restarting systemd-networkd"
@@ -21,6 +21,6 @@
 
 - name: "Generating bird4 configuration for {{item.value.peer_name}}"
   template:
-    src: tpl/bird4.j2
+    src: tpl/peer4/bird4.j2
     dest: /etc/bird/peer4/{{item.value.peer_name}}.conf
   when: item.value.ip_type == "ipv4"

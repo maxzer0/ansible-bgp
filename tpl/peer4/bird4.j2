@@ -1,0 +1,8 @@
+protocol bgp {{item.value.peer_name}} from dnpeers {
+  neighbor {{item.value.peeringip}} as {{item.value.asn}};
+  {% for line in priority_peering.stdout_lines %}
+    {% if 'where' in line %}
+        {{ line }}
+    {% endif %}
+  {% endfor %}
+};

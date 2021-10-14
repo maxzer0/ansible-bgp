@@ -1,0 +1,60 @@
+---
+- hosts: peering
+  tasks:
+    - name: "Setting up sysctl ip-forwarding"
+      sysctl:
+        name: "{{ item }}"
+        value: '1'
+        sysctl_set: yes
+        state: present
+        reload: yes
+      loop:
+        - net.ipv6.conf.all.forwarding
+        - net.ipv4.conf.all.forwarding
+
+    - name: "Disabling the rp filter (due to asymmetric routing)"
+      sysctl:
+        name: "{{ item }}"
+        value: '0'
+        sysctl_set: yes
+        state: present
+        reload: yes 
+      loop:
+        - net.ipv4.conf.all.rp_filter
+        - net.ipv4.conf.default.rp_filter
+
+    - name: "Installing WireGuard and BIRD"
+      apt:
+        update_cache: yes
+        pkg:
+         - bird
+         - wireguard
+        state: present
+    
+    - name: "Creating community filter"
+      template:
+        src: tpl/community_filter.j2
+        dest: /etc/bird/community_filters.conf
+
+    - name: "Creating /var/lib/bird folder"
+      file:
+        dest: /var/lib/bird
+        state: directory
+
+    - name: "Install the DN42 RoA onto crontab"
+      cron:
+        user: root
+        minute: "*/15"
+        job: "{{ item }}"
+      loop:
+       - "curl -sfSLR -o/var/lib/bird/bird6_roa_dn42.conf -z/var/lib/bird/bird6_roa_dn42.conf https://dn42.burble.com/roa/dn42_roa_bird1_6.conf && /usr/sbin/birdc6 configure"
+       - "curl -sfSLR -o/var/lib/bird/bird_roa_dn42.conf -z/var/lib/bird/bird_roa_dn42.conf https://dn42.burble.com/roa/dn42_roa_bird1_4.conf && /usr/sbin/birdc configure"
+    
+    - name: "Generating BIRD4 configuration"
+      template:
+        src: "{{ item.tmpl }}"
+        dest: "{{ item.dst }}"
+      loop:
+        - { tmpl: "tpl/bird4.j2", dst: "/etc/bird/bird.conf" }
+        - { tmpl: "tpl/local4.j2", dst: "/etc/bird/local4.conf" }
+    

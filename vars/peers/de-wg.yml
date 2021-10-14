@@ -19,3 +19,5 @@ peer2:
   wireguardport: 21569
   link_local: false
   asn: "4242423914"
+  unique: true
+  unique_host: "de-ne.p.s0.nz"

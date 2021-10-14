@@ -9,6 +9,7 @@
     - name: "Execute systemd-networkd and bird configuration task" # This is for WireGuard solutions.
       include_tasks: handlers/wg-conf.yml
       with_dict: "{{ peers }}"
+      when: (item.value.unique is not defined) or (item.value.unique == true and item.value.unique_host == inventory_hostname)
 
     - name: "Reconfiguring bird"
       shell: "birdc configure"
