@@ -1,3 +1,4 @@
+# Generate WireGuard config in systemd-networkd
 ---
 - name: "Generating netdev config file for {{item.value.peer_name}}"
   template:
