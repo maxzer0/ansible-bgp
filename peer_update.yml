@@ -14,7 +14,7 @@
     - name: "Generate BIRD configuration"
       include_tasks: handlers/bird4.yml
       with_dict: "{{ peers }}"
-      when: (item.value.unique is not defined) or (item.value.unique == true and item.value.unique_host == inventory_hostname)
+      when: (item.value.unique is not defined) or (item.value.unique == true and item.value.unique_host == inventory_hostname) # Only for that one peering server, there's gotta be a better way to do this.
 
     - name: "Reconfiguring bird"
       shell: "birdc configure"

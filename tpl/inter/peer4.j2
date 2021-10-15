@@ -1,0 +1,3 @@
+protocol bgp {{item.value.peer_name}} from interpeers {
+  neighbor {{item.vars.peeringip}} as {{hostvars[ansible_hostname].asn}};
+};

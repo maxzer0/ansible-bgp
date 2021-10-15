@@ -10,8 +10,11 @@
       register: wg_pub 
 
     - name: "Get peering data for next server in line"
-      set_fact:
-        local_peer:
-          peeringip: 
-          peeringip6:
-          wireguardport:
+      template:
+        src:
+        dest:
+      with_items:
+        - "{{ groups[hostvars[ansible_hostname].peering_country] }}"
+      when: groups[hostvars[ansible_hostname].peering_country} is not defined
+    
+    - name: ""

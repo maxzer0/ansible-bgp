@@ -6,7 +6,7 @@ If this project doesn't seem up to your standards, this is not meant to be used 
 
 This was my first time writing a bigger Ansible playbook. It is as of 13.10.21 still missing the playbook for setting up a server ready to peer.
 
-Hosts are divided by country.
+Peering hosts are divided by country. So far my peering is EU only, but i'll be looking into other continents soonish.
 
 My current peering partners can be found under vars/peers.
 
